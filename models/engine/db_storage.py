@@ -13,17 +13,20 @@ class DBStorage:
         """Initialize a new DBStorage instance."""
 
         self.__engine = create_engine(
-            f"mysql+mysqldb://{user}:{pwd}@{host}/{db_name}", pool_pre_ping=True
+            f"mysql+mysqldb://{user}:{pwd}@{host}/{db_name}",
+            pool_pre_ping=True
         )
         if getenv("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
 
-        session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
 
     def all(self, cls=None):
-        """Query on the current database session all objects of the given class."""
+        """Query on the current database session
+        all objects of the given class."""
         if cls is None:
             return {
                 f"{type(o).__name__}.{o.id}": o
@@ -32,7 +35,8 @@ class DBStorage:
         else:
             if type(cls) == str:
                 cls = eval(cls)
-            return {f"{type(o).__name__}.{o.id}": o.as_dict() for o in self.__session.query(cls)}
+            return {f"{type(o).__name__}.{o.id}": o.as_dict()
+                    for o in self.__session.query(cls)}
 
     def new(self, obj):
         """Add obj to the current database session."""
