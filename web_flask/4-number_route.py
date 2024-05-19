@@ -33,12 +33,11 @@ def python_text(text):
     return f"Python {text.replace('_', ' ')}"
 
 
-@app.route("/number/<n>", strict_slashes=False)
+@app.route("/number/<int:n>", strict_slashes=False)
 def number(n):
     """property that displays 'n is a number'
     only if n is an integer"""
-    if n.isdigit() or (n.startswith('-') and n[1:].isdigit()):
-        return f"{n} is a number"
+    return f"{n} is a number"
 
 
 if __name__ == "__main__":
