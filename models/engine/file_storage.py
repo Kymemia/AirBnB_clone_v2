@@ -58,3 +58,8 @@ class FileStorage:
         """Deletes obj from __objects if it exists"""
         if obj is not None:
             del self.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
+
+    def close(self):
+        """calls the reload method
+        for deserializing JSON file to objects"""
+        self.reload()
