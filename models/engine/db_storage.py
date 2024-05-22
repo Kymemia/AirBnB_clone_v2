@@ -2,7 +2,6 @@
 from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
 from models.base_model import Base, BaseModel
 
 
@@ -28,19 +27,17 @@ class DBStorage:
         """Query on the current database session
         all objects of the given class."""
         if cls is None:
-            return {
-                f"{type(o).__name__}.{o.id}": o
-                for o in self.__session.query(Base)
-            }
+            return self.__session.query(Base)
         else:
             if type(cls) == str:
                 cls = eval(cls)
-            return {f"{type(o).__name__}.{o.id}": o.as_dict()
-                    for o in self.__session.query(cls)}
+            cls = eval(cls)
+            return self.__session.query(cls).one()
 
     def new(self, obj):
         """Add obj to the current database session."""
         self.__session.add(obj)
+        self.__session.commit()
 
     def save(self):
         """Commit all changes to the current database session."""
@@ -57,7 +54,7 @@ class DBStorage:
 
     def close(self):
         """Close the working SQLAlchemy session."""
-        self.__session.remove()
+        self.__session.close()
 
     def remove(self):
         """removes session"""

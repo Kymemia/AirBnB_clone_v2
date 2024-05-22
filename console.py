@@ -5,12 +5,12 @@ import json
 import sys
 from models.base_model import BaseModel # type: ignore
 from models import storage # type: ignore
-from models import User # type: ignore
-from models import Place # type: ignore
-from models import State # type: ignore
-from models import City # type: ignore
-from models import Amenity
-from models import Review
+from models.user import User # type: ignore
+from models.place import Place # type: ignore
+from models.state import State # type: ignore
+from models.city import City # type: ignore
+from models.amenity import Amenity
+from models.review import Review
 
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
@@ -133,7 +133,8 @@ class HBNBCommand(cmd.Cmd):
             setattr(class_instance, key, value)
 
         """Handles saving of the new instance"""
-        class_instance.save()
+        storage.new(class_instance)
+        storage.save()
         print(class_instance.id)
 
     def parse_params(self, params_str):

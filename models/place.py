@@ -4,8 +4,10 @@ from os import getenv
 import sqlalchemy
 from models.user import User
 from models.review import Review
+from models.base_model import BaseModel, Base
+import models
 
-if models.storage_t == 'db':
+if models.storage == 'db':
     """Define Many-to-Many relationship table for Place and Amenity"""
     from sqlalchemy import Table, Column, String, ForeignKey
     from sqlalchemy.orm import relationship
@@ -23,9 +25,9 @@ if models.storage_t == 'db':
 
 class Place(BaseModel, Base):
     """ A place to stay """
-    if models.storage_t == 'db':
+    __tablename__ = 'places'
+    if models.storage == 'db':
         """Define table structure for database storage"""
-        __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -58,7 +60,7 @@ class Place(BaseModel, Base):
         """Initialize Place"""
         super().__init__(*args, **kwargs)
 
-    if models.storage_t != 'db':
+    if models.storage != 'db':
         # Getter properties for file storage
         @property
         def reviews(self):
