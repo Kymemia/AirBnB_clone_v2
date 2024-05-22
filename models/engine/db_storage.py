@@ -31,7 +31,6 @@ class DBStorage:
         else:
             if type(cls) == str:
                 cls = eval(cls)
-            cls = eval(cls)
             return self.__session.query(cls).one()
 
     def new(self, obj):
